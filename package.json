@@ -1,0 +1,12 @@
+{
+  "name": "job-form-clipboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A local-only Chrome extension for reusable job application form data.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node scripts/check-extension.mjs",
+    "smoke": "node scripts/browser-smoke.mjs && node scripts/options-smoke.mjs"
+  }
+}

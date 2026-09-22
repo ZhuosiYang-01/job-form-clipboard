@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网申资料夹测试表单</title>
+    <style>
+      body { margin: 0; color: #16344b; background: #eef2f4; font: 15px/1.5 "Segoe UI", "Microsoft YaHei", sans-serif; }
+      main { width: min(700px, calc(100% - 48px)); margin: 50px auto; padding: 32px; background: #fff; border-radius: 16px; box-shadow: 0 12px 40px rgba(22,52,75,.12); }
+      h1 { margin-top: 0; }
+      form { display: grid; gap: 20px; }
+      label { display: grid; gap: 7px; font-weight: 700; }
+      input, textarea { padding: 11px 12px; border: 1px solid #aebec8; border-radius: 9px; font: inherit; }
+      textarea { min-height: 160px; resize: vertical; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>示例网申表单</h1>
+      <form>
+        <label for="candidate-name">姓名</label>
+        <input id="candidate-name" name="full_name" placeholder="请输入姓名">
+        <label for="self-evaluation">个人评价</label>
+        <textarea id="self-evaluation" name="self_evaluation" placeholder="请填写个人评价"></textarea>
+      </form>
+    </main>
+    <script>
+      const demoEntries = [
+        { id: "demo-name", title: "姓名", category: "基本信息", aliases: ["真实姓名"], content: "示例用户", pinned: true },
+        { id: "demo-evaluation", title: "个人评价", category: "求职材料", aliases: ["自我评价", "个人总结"], content: "这是用于本地功能验证的示例个人评价。", pinned: true },
+        { id: "demo-evaluation-alt", title: "自我评价", category: "求职材料", aliases: ["个人评价"], content: "这是第二条示例评价。", pinned: false },
+        { id: "demo-long", title: "项目描述", category: "项目经历", aliases: [], content: "这是用于本地功能验证的项目描述。参与需求梳理、资料整理和沟通协调，记录任务进度与反馈，整理常见问题，并根据测试意见调整页面说明。".repeat(2), pinned: false }
+      ];
+      window.__aiConfig = null;
+      window.chrome = {
+        storage: {
+          local: { get: async () => ({ jobFormClipboardEntries: demoEntries, jobClipboardAiConfig: window.__aiConfig }), set: async () => {} },
+          onChanged: { addListener(listener) { window.__jobClipboardStorageChanged = listener; } }
+        },
+        runtime: {
+          getURL: (path) => `http://127.0.0.1:8765/${path}`,
+          onMessage: { addListener(listener) { window.__jobClipboardMessage = listener; } },
+          sendMessage(message) {
+            if (message?.type === "JOB_CLIPBOARD_COMPRESS") {
+              window.__aiCallCount = (window.__aiCallCount || 0) + 1;
+              return Promise.resolve({ ok: true, candidate: "参与需求梳理、资料整理和沟通协调。" });
+            }
+            if (message?.type === "JOB_CLIPBOARD_MATCH") {
+              window.__aiMatchCalls = [...(window.__aiMatchCalls || []), message];
+              return Promise.resolve({ ok: true, entryIds: message.context.label === "姓名" ? ["demo-name"] : ["demo-evaluation-alt", "demo-evaluation"] });
+            }
+          }
+        }
+      };
+    </script>
+    <script src="../../src/content/content-script.js"></script>
+    <script>
+      if (!new URLSearchParams(location.search).has("manual")) {
+        setTimeout(() => window.__jobClipboardMessage?.({ type: "JOB_CLIPBOARD_TOGGLE" }), 50);
+      }
+    </script>
+  </body>
+</html>

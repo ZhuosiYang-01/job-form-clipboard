@@ -1,0 +1,32 @@
+# Dependencies and local tooling
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Local secrets and environment files
+.env
+.env.*
+*.pem
+*.key
+
+# Personal job-search data and exported backups
+personal-data/
+local-data/
+exports/
+*个人资料*
+*简历*
+*备份*.json
+*backup*.json
+!examples/
+!examples/个人资料模板.md
+
+# Generated extension packages
+*.zip
+*.crx
+
+# Nested publication checkout and duplicate local icon
+store-assets/pages-publish/
+/商店图标.png
+
+# Local design-review working files
+.impeccable/

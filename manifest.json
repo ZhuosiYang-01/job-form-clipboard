@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "网申资料夹",
+  "version": "0.1.0",
+  "description": "本地保存常用网申资料，识别当前字段并点击填入。",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "optional_host_permissions": ["https://*/*"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_title": "打开网申资料夹"
+  },
+  "options_page": "src/options/options.html",
+  "web_accessible_resources": [
+    {
+      "resources": ["src/shared/field-matcher.js", "src/shared/paste-parser.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ]
+}

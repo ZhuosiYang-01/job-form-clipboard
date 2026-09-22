@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网申资料夹</title>
+    <link rel="stylesheet" href="options.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div><h1>网申资料夹</h1><p>按网申常见模块整理，资料默认保存在当前 Chrome 浏览器中</p></div>
+      <button class="secondary" id="export-button" type="button">导出本地备份</button>
+    </header>
+    <main class="workspace">
+      <nav class="module-nav" aria-label="个人资料模块">
+        <div class="nav-heading"><strong>个人资料</strong><span id="entry-count">0 项已填写</span></div>
+        <div id="module-tabs"></div>
+        <p>空白字段不会保存，也不会出现在网页侧栏。</p>
+      </nav>
+      <section class="module-editor" aria-labelledby="module-title">
+        <details class="ai-settings" id="ai-settings">
+          <summary>AI 设置</summary>
+          <p>可填写提供 OpenAI 兼容 Chat Completions 接口的大模型 API。长文本压缩仅在你确认后发送所选卡片原文。密钥仅保存在本次浏览器会话中，重启或刷新扩展后需重新填写。</p>
+          <form id="ai-settings-form">
+            <label>API 地址<input id="ai-endpoint" type="url" required placeholder="https://api.example.com/v1/chat/completions" autocomplete="off"></label>
+            <label>模型名<input id="ai-model" required placeholder="例如：你的模型名称" autocomplete="off"></label>
+            <label>API 密钥<input id="ai-key" type="password" placeholder="仅保存在本次浏览器会话" autocomplete="new-password"></label>
+            <label class="ai-toggle"><input id="ai-auto-match" type="checkbox"><span>开启 AI 自动识别当前字段</span></label>
+            <p class="ai-toggle-note">默认关闭。开启后，仅在侧栏打开且切换网页表单字段时，向你的 API 发送字段提示和资料卡标题、类别、别名，不发送资料正文。若标题本身含隐私，也会被发送；每次新字段可能产生费用。无合适资料时仍可手动搜索。</p>
+            <div class="ai-settings-actions"><button class="secondary" id="ai-clear" type="button">清除配置</button><button class="secondary" id="ai-test" type="button">测试 API 连接</button><button class="primary" type="submit">保存 AI 配置</button></div>
+            <span id="ai-settings-status" role="status" aria-live="polite"></span>
+          </form>
+        </details>
+        <header class="module-heading">
+          <div><h2 id="module-title">基础信息</h2><p id="module-description">填写常用网申字段，未填写的内容会自动忽略。</p></div>
+        </header>
+        <form id="module-form">
+          <div id="record-list"></div>
+          <button class="secondary add-record-bottom" id="add-record-button" type="button" hidden>增加一段</button>
+          <div class="save-bar"><span id="save-hint">修改后点击保存</span><button class="primary" type="submit">保存当前模块</button></div>
+        </form>
+        <section class="legacy-panel" id="legacy-panel" hidden>
+          <div><h3>其他资料</h3><p>由快速粘贴或旧版导入创建，不影响上面的模板资料。</p></div>
+          <div id="legacy-list"></div>
+        </section>
+      </section>
+    </main>
+    <div class="notice" id="notice" role="status" aria-live="polite"></div>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
