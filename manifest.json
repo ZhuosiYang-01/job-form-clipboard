@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "网申资料夹",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "本地保存常用网申资料，识别当前字段并点击填入。",
   "permissions": ["activeTab", "scripting", "storage"],
   "optional_host_permissions": ["https://*/*"],
